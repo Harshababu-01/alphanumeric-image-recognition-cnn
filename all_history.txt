@@ -1,0 +1,82 @@
+﻿commit d55385dabd98ce740662cf6d490e0421fe622299
+Author: Harshacreator-gif <harshababu012006@gmail.com>
+Date:   Sun Mar 29 22:07:01 2026 +0530
+
+    Removed uploaded images from repo
+
+.gitignore
+uploads/12f456cc5dbd4d3c81b019d2ce375a18.jpg
+uploads/18213df384174b78b7fa7b793d64365a.jpg
+uploads/187efe8930054e678536b8904747da33.jpg
+uploads/21abad8d69914525b4a00aa9098e1f67.png
+uploads/2cd43381505b41fea9c6cf4c966cfa1c.png
+uploads/2e8b291c5ee549b1b5f839ecfaea8e41.jpg
+uploads/31396849a11945d0a790a1d3274e0b26.jpg
+uploads/38eabde8934243ffb50b629184d8d9ba.jpg
+uploads/3bffc1649c6341278d0e6514d180d1ea.jpg
+uploads/4f7075cbd0b94362b6ccc1170e835255.png
+uploads/84703458e2a94b6ba0bef22813834cdf.jpg
+uploads/9f7036a371ba4c9e8bafa5f448c5139f.png
+uploads/b34c9366218f4aa4af464e6f8f5a293a.jpg
+uploads/b3cac65f9c0848f9af82c7f26b2e9158.png
+uploads/b4d5e97918e444d6a4c14b57ab178bd4.jpg
+uploads/bd0fed5ec28942fe964421cd67f51324.jpg
+uploads/bfb879249ebc4f4f8043a6867f84372c.png
+uploads/d52a6179d5204317af5849382fa6a5d4.png
+uploads/da23dab047ec4850bfea380ec1df71ca.jpg
+uploads/e8a67a694e904327881c8bb10727c87b.jpg
+uploads/f055d054025844f7841f3285fcb888ed.png
+uploads/f8bfc86115c24879a6608c20cabf6b69.png
+uploads/fd6126b3ecd94fe4a782568c6c42ad2b.png
+
+commit 6d9ca2400a990886fda00b21807688c1d9107420
+Author: Harshacreator-gif <harshababu012006@gmail.com>
+Date:   Sun Mar 29 21:59:23 2026 +0530
+
+    Initial commit - Handwritten Recognition System
+
+.gitignore
+app.py
+app/__init__.py
+app/app.py
+app/routes.py
+app/utils.py
+config/config.py
+data/processed/.gitkeep
+data/raw/.gitkeep
+main.py
+models/.gitkeep
+readme.md
+requirements.txt
+src/evaluate.py
+src/predict.py
+src/preprocess.py
+src/train.py
+static/css/style.css
+templates/index.html
+tests/test_model.py
+uploads/.gitkeep
+uploads/12f456cc5dbd4d3c81b019d2ce375a18.jpg
+uploads/18213df384174b78b7fa7b793d64365a.jpg
+uploads/187efe8930054e678536b8904747da33.jpg
+uploads/21abad8d69914525b4a00aa9098e1f67.png
+uploads/2cd43381505b41fea9c6cf4c966cfa1c.png
+uploads/2e8b291c5ee549b1b5f839ecfaea8e41.jpg
+uploads/31396849a11945d0a790a1d3274e0b26.jpg
+uploads/38eabde8934243ffb50b629184d8d9ba.jpg
+uploads/3bffc1649c6341278d0e6514d180d1ea.jpg
+uploads/4f7075cbd0b94362b6ccc1170e835255.png
+uploads/84703458e2a94b6ba0bef22813834cdf.jpg
+uploads/9f7036a371ba4c9e8bafa5f448c5139f.png
+uploads/b34c9366218f4aa4af464e6f8f5a293a.jpg
+uploads/b3cac65f9c0848f9af82c7f26b2e9158.png
+uploads/b4d5e97918e444d6a4c14b57ab178bd4.jpg
+uploads/bd0fed5ec28942fe964421cd67f51324.jpg
+uploads/bfb879249ebc4f4f8043a6867f84372c.png
+uploads/d52a6179d5204317af5849382fa6a5d4.png
+uploads/da23dab047ec4850bfea380ec1df71ca.jpg
+uploads/e8a67a694e904327881c8bb10727c87b.jpg
+uploads/f055d054025844f7841f3285fcb888ed.png
+uploads/f8bfc86115c24879a6608c20cabf6b69.png
+uploads/fd6126b3ecd94fe4a782568c6c42ad2b.png
+utils/helper.py

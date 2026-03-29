@@ -1,0 +1,2 @@
+﻿origin	https://github.com/Harshababu-01/CodeAlpha_HandwrittenRecognition.git (fetch)
+origin	https://github.com/Harshababu-01/CodeAlpha_HandwrittenRecognition.git (push)
