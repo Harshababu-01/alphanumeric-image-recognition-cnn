@@ -1,0 +1,31 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Distribution / env folders
+.env
+venv/
+env/
+ENV/
+.venv/
+
+# Pytest
+.pytest_cache/
+.coverage
+
+# Data folders
+data/raw/*
+data/processed/*
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+
+# Models directory
+models/*
+!models/.gitkeep
+
+# IDE and OS files
+.idea/
+.vscode/
+.DS_Store

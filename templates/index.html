@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Handwritten Recognition System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f172a;
+            color: white;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        header h1 {
+            font-size: 2.5rem;
+            color: #f8fafc;
+            margin-bottom: 10px;
+        }
+        header p {
+            font-size: 1.1rem;
+            color: #94a3b8;
+        }
+        .card {
+            background: #1e293b;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            padding: 30px;
+        }
+        .toggle-group {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        .mode-btn {
+            background: #334155;
+            border: 2px solid transparent;
+            color: #cbd5e1;
+            padding: 12px 24px;
+            border-radius: 9999px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .mode-btn:hover {
+            background: #475569;
+        }
+        .mode-btn.active {
+            background: rgba(59, 130, 246, 0.15);
+            border-color: #3b82f6;
+            color: #60a5fa;
+        }
+        .selected-model-label {
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 25px;
+        }
+        .selected-model-label span {
+            color: #60a5fa;
+        }
+        .input-methods {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            justify-content: center;
+        }
+        .input-cell {
+            flex: 1;
+            min-width: 300px;
+            background: #0f172a;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid #334155;
+        }
+        .input-cell h4 {
+            margin-top: 0;
+            color: #e2e8f0;
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+        }
+        canvas {
+            background: white;
+            border: 2px dashed #475569;
+            border-radius: 8px;
+            cursor: crosshair;
+            margin-bottom: 15px;
+        }
+        .btn {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 9999px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+            font-size: 0.95rem;
+        }
+        .btn:hover:not(:disabled) {
+            background: #2563eb;
+        }
+        .btn:disabled {
+            background: #334155;
+            color: #64748b;
+            cursor: not-allowed;
+        }
+        .btn-secondary {
+            background: #334155;
+            color: #f1f5f9;
+        }
+        .btn-secondary:hover:not(:disabled) {
+            background: #475569;
+        }
+        .canvas-controls {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+        .drop-zone {
+            border: 2px dashed #475569;
+            background: #1e293b;
+            padding: 50px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 120px;
+            margin-bottom: 15px;
+        }
+        .drop-zone:hover, .drop-zone--over {
+            border-color: #3b82f6;
+            background: rgba(59, 130, 246, 0.05);
+        }
+        .drop-zone__input {
+            display: none;
+        }
+        .drop-zone__prompt {
+            color: #94a3b8;
+            font-weight: 500;
+        }
+        .preview-section {
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 1px solid #334155;
+            text-align: center;
+        }
+        .preview-section.hidden {
+            display: none;
+        }
+        #imagePreview {
+            max-width: 150px;
+            max-height: 150px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.5);
+            margin-bottom: 20px;
+        }
+        .prediction-result {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 20px;
+            max-width: 400px;
+            margin: 0 auto 20px auto;
+        }
+        .prediction-result h2 {
+            margin-top: 0;
+            color: #f8fafc;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .prediction-main {
+            font-size: 1.2rem;
+            color: #e2e8f0;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+        .top3-results {
+            background: #0f172a;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 20px;
+            text-align: left;
+            border: 1px solid #334155;
+        }
+        .top3-results h4 {
+            margin-top: 0;
+            color: #cbd5e1;
+            margin-bottom: 10px;
+            font-size: 1rem;
+        }
+        ul#top3List {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        ul#top3List li {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            border-bottom: 1px solid #1e293b;
+            color: #cbd5e1;
+        }
+        ul#top3List li:last-child {
+            border-bottom: none;
+        }
+        ul#top3List li strong {
+            color: #f1f5f9;
+        }
+        .loading, .error-msg, .warning-msg {
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .error-msg {
+            background: rgba(239, 68, 68, 0.1);
+            color: #fca5a5;
+            border: 1px solid #f87171;
+        }
+        .warning-msg {
+            background: rgba(245, 158, 11, 0.1);
+            color: #fcd34d;
+            border: 1px solid #fbbf24;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+        .hidden {
+            display: none !important;
+        }
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Handwritten Recognition System</h1>
+            <p>Draw or upload a single character or digit</p>
+        </header>
+
+        <main class="card">
+            <!-- Global Mode Toggles -->
+            <div class="toggle-group">
+                <button class="mode-btn active" data-mode="digit">Digit Model (0-9)</button>
+                <button class="mode-btn" data-mode="character">Character Model (A-Z, a-z)</button>
+            </div>
+            
+            <div class="selected-model-label">
+                👉 Selected Model: <span id="currentModelLabel">Digit</span>
+            </div>
+
+            <div class="input-methods">
+                <!-- Direct Drawing Interface -->
+                <div class="input-cell canvas-container">
+                    <h4>Draw Here</h4>
+                    <canvas id="drawCanvas" width="220" height="220"></canvas>
+                    <div class="canvas-controls">
+                        <button id="clearCanvasBtn" type="button" class="btn btn-secondary">Clear</button>
+                        <button id="predictCanvasBtn" type="button" class="btn">Predict</button>
+                    </div>
+                </div>
+
+                <!-- Web Dropzone Interface -->
+                <div class="input-cell upload-container">
+                    <h4>Upload Image</h4>
+                    <form id="uploadForm" enctype="multipart/form-data">
+                        <div class="drop-zone" id="dropZone">
+                            <span class="drop-zone__prompt">Drag & Drop Image or Click to Browse</span>
+                            <input type="file" name="file" id="fileInput" class="drop-zone__input" accept=".png, .jpeg, .jpg">
+                        </div>
+                    </form>
+                    <div class="canvas-controls" style="margin-bottom: 5px;">
+                        <button id="predictUploadBtn" type="button" class="btn" disabled>Predict</button>
+                    </div>
+                    <div style="color: #64748b; font-size: 0.9rem;">JPG/PNG (Max 2MB)</div>
+                </div>
+            </div>
+
+            <!-- Deep Neural Results Layout -->
+            <div class="preview-section hidden" id="previewSection">
+                <img id="imagePreview" src="" alt="Uploaded Image Preview" class="hidden">
+                
+                <div class="result-box">
+                    <div class="loading hidden" id="loadingIndicator">
+                        Processing...
+                    </div>
+                    
+                    <div class="prediction-result hidden" id="predictionResult">
+                        <h2>🧠 Prediction Result:</h2>
+                        
+                        <div class="warning-msg hidden" id="lowConfidenceMsg">
+                            👉 Uncertain prediction — please draw clearly
+                        </div>
+
+                        <div id="predictionMainGroup">
+                            <div class="prediction-main">
+                                👉 <span id="mainLabelPrefix">Predicted Digit:</span> <strong id="mainResult"></strong>
+                            </div>
+                            <div class="prediction-main">
+                                👉 Confidence: <strong id="confidenceResult"></strong>
+                            </div>
+                        </div>
+                        
+                        <!-- Top 3 Hierarchy UI -->
+                        <div class="top3-results" id="top3Results">
+                            <h4>Top 3 Predictions:</h4>
+                            <ul id="top3List"></ul>
+                        </div>
+                    </div>
+                    
+                    <div class="error-msg hidden" id="errorMsg"></div>
+                </div>
+                
+                <button type="button" class="btn btn-secondary" id="resetBtn" style="margin-top: 20px;">Reset</button>
+            </div>
+        </main>
+        
+        <footer>
+            <p>Powered by TensorFlow & Flask</p>
+        </footer>
+    </div>
+
+    <script>
+        // State Machine
+        let currentMode = 'digit';
+        let currentUploadFile = null;
+        
+        // Element Hooks
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
+        const predictUploadBtn = document.getElementById('predictUploadBtn');
+        const previewSection = document.getElementById('previewSection');
+        const imagePreview = document.getElementById('imagePreview');
+        const predictionResult = document.getElementById('predictionResult');
+        const loadingIndicator = document.getElementById('loadingIndicator');
+        const errorMsg = document.getElementById('errorMsg');
+        const top3List = document.getElementById('top3List');
+        const currentModelLabel = document.getElementById('currentModelLabel');
+        const mainLabelPrefix = document.getElementById('mainLabelPrefix');
+        const lowConfidenceMsg = document.getElementById('lowConfidenceMsg');
+        const predictionMainGroup = document.getElementById('predictionMainGroup');
+        
+        // Mode Toggler Event Capture
+        document.querySelectorAll('.mode-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentMode = btn.dataset.mode;
+                
+                // Update label text
+                currentModelLabel.textContent = currentMode === 'digit' ? 'Digit' : 'Character';
+            });
+        });
+
+        /* ---- Canvas Controller Setup ---- */
+        const canvas = document.getElementById('drawCanvas');
+        const ctx = canvas.getContext('2d');
+        let painting = false;
+
+        function clearCanvas() {
+            ctx.fillStyle = "white"; 
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        }
+        clearCanvas();
+
+        function startPosition(e) {
+            painting = true;
+            draw(e);
+        }
+
+        function endPosition() {
+            painting = false;
+            ctx.beginPath();
+        }
+
+        function draw(e) {
+            if (!painting) return;
+            let rect = canvas.getBoundingClientRect();
+            let x = e.clientX - rect.left;
+            let y = e.clientY - rect.top;
+
+            ctx.lineWidth = 14; 
+            ctx.lineCap = 'round';
+            ctx.strokeStyle = '#000000';
+
+            ctx.lineTo(x, y);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+        }
+
+        canvas.addEventListener('mousedown', startPosition);
+        canvas.addEventListener('mouseup', endPosition);
+        canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('mouseout', endPosition);
+
+        document.getElementById('clearCanvasBtn').addEventListener('click', clearCanvas);
+        
+        document.getElementById('predictCanvasBtn').addEventListener('click', () => {
+            const dataURL = canvas.toDataURL('image/png');
+            handleInferenceRequest({ image_base64: dataURL });
+            imagePreview.src = dataURL;
+            imagePreview.classList.remove('hidden');
+        });
+
+        /* ---- Drag & Drop Controller ---- */
+        dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('drop-zone--over'); });
+        dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drop-zone--over'));
+        dropZone.addEventListener('drop', e => {
+            e.preventDefault();
+            dropZone.classList.remove('drop-zone--over');
+            if (e.dataTransfer.files.length) handleFileUpload(e.dataTransfer.files[0]);
+        });
+        dropZone.addEventListener('click', () => fileInput.click());
+        fileInput.addEventListener('change', () => {
+            if (fileInput.files.length) handleFileUpload(fileInput.files[0]);
+        });
+
+        function handleFileUpload(file) {
+            if (!file.type.startsWith('image/')) {
+                showError("Please upload a valid image file.");
+                return;
+            }
+            
+            errorMsg.classList.add('hidden');
+            currentUploadFile = file;
+            predictUploadBtn.disabled = false;
+            dropZone.querySelector('.drop-zone__prompt').textContent = file.name;
+        }
+        
+        predictUploadBtn.addEventListener('click', () => {
+            if (!currentUploadFile) return;
+            const reader = new FileReader();
+            reader.onload = e => {
+                imagePreview.src = e.target.result;
+                imagePreview.classList.remove('hidden');
+                handleInferenceRequest({ file: currentUploadFile });
+            };
+            reader.readAsDataURL(currentUploadFile);
+        });
+
+        document.getElementById('resetBtn').addEventListener('click', () => {
+             previewSection.classList.add('hidden');
+             fileInput.value = '';
+             currentUploadFile = null;
+             predictUploadBtn.disabled = true;
+             dropZone.querySelector('.drop-zone__prompt').textContent = "Drag & Drop Image or Click to Browse";
+             predictionResult.classList.add('hidden');
+             errorMsg.classList.add('hidden');
+        });
+
+        /* ---- Comprehensive Core Network Interaction Routine ---- */
+        async function handleInferenceRequest(dataContext) {
+            previewSection.classList.remove('hidden');
+            predictionResult.classList.add('hidden');
+            errorMsg.classList.add('hidden');
+            loadingIndicator.classList.remove('hidden');
+
+            const formData = new FormData();
+            formData.append('mode', currentMode);
+            
+            if (dataContext.file) formData.append('file', dataContext.file);
+            else if (dataContext.image_base64) formData.append('image_base64', dataContext.image_base64);
+
+            try {
+                const response = await fetch('/predict', { method: 'POST', body: formData });
+                const data = await response.json();
+                
+                loadingIndicator.classList.add('hidden');
+                
+                if (response.ok) {
+                    if (data.low_confidence) {
+                        lowConfidenceMsg.classList.remove('hidden');
+                        predictionMainGroup.classList.add('hidden');
+                    } else {
+                        lowConfidenceMsg.classList.add('hidden');
+                        predictionMainGroup.classList.remove('hidden');
+                        // Output format correctly matched to mode
+                        mainLabelPrefix.textContent = currentMode === 'digit' ? 'Predicted Digit:' : 'Predicted Character:';
+                        document.getElementById('mainResult').textContent = data.prediction;
+                        
+                        // Confidence is returned as a pre-formatted string or a number
+                        document.getElementById('confidenceResult').textContent = data.confidence;
+                    }
+                    
+                    const top3ListElement = document.getElementById('top3List');
+                    top3ListElement.innerHTML = '';
+                    
+                    data.top_3.forEach((item, index) => {
+                        const li = document.createElement('li');
+                        li.innerHTML = `<span>${index+1}. <strong>${item.label}</strong> - ${(item.confidence * 100).toFixed(1)}%</span>`;
+                        top3ListElement.appendChild(li);
+                    });
+                    
+                    predictionResult.classList.remove('hidden');
+                } else {
+                    showError(data.error || "An error occurred during prediction.");
+                }
+            } catch (err) {
+                loadingIndicator.classList.add('hidden');
+                showError("Network Error. Server is unavailable.");
+            }
+        }
+
+        function showError(msg) {
+            errorMsg.textContent = msg;
+            errorMsg.classList.remove('hidden');
+            predictionResult.classList.add('hidden');
+            loadingIndicator.classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
