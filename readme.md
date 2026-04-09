@@ -1,77 +1,148 @@
-# Handwritten Digit Recognition with CNN
+# Alphanumeric Image Recognition System (CNN)
 
-A professional, modular machine learning project that implements a Convolutional Neural Network (CNN) using TensorFlow and Keras to predictably recognize handwritten digits from the MNIST dataset.
+A deep learning-based web application that recognizes **alphanumeric characters (digits + letters)** from both uploaded images and user-drawn input using a Convolutional Neural Network (CNN) built with TensorFlow and Keras.
 
-## Architecture & Modular Structure
+---
+
+## 🎯 Overview
+
+This project provides an intelligent system capable of:
+
+* ✍️ Recognizing characters drawn on a canvas
+* 📤 Predicting characters from uploaded images
+* 🔢 Supporting digits (0–9) and extending towards full alphanumeric recognition
+* 🤖 Delivering predictions with confidence scores
+
+---
+
+## 🧠 Model & Dataset
+
+* CNN (Convolutional Neural Network)
+* Built using TensorFlow & Keras
+
+### Dataset Used:
+
+* MNIST Dataset (Digits 0–9)
+
+> ⚠️ Note: Character (A–Z) recognition is designed as an extension and can be integrated with additional datasets.
+
+---
+
+## ✨ Features
+
+* Upload image for prediction
+* Draw characters on canvas
+* Real-time prediction
+* Confidence score output
+* Modular ML pipeline
+* Clean Flask-based web interface
+
+---
+
+## 🏗️ Architecture & Modular Structure
 
 ```text
-├── app/                  # Application interface (CLI functionality)
+├── app/                  
 │   └── app.py
-├── config/               # Configuration and hyperparameter constants
+├── config/               
 │   └── config.py
-├── data/                 # Data folder
-│   ├── raw/              # Raw data downloads (git ignored)
-│   └── processed/        # Processed / ready datasets (git ignored)
-├── models/               # Saved trained artifacts (git ignored)
-├── src/                  # Source code for the ML pipeline
-│   ├── preprocess.py     # Data fetching and preprocessing
-│   ├── train.py          # Network topology and model training
-│   ├── evaluate.py       # Metrics evaluation module
-│   └── predict.py        # Independent inference script
-├── tests/                # Unit testing suite
+├── data/                 
+│   ├── raw/              
+│   └── processed/        
+├── models/               
+├── src/                  
+│   ├── preprocess.py     
+│   ├── train.py          
+│   ├── evaluate.py       
+│   └── predict.py        
+├── tests/                
 │   └── test_model.py
-├── utils/                # Utilities and generic helper scripts
+├── utils/                
 │   └── helper.py
-├── main.py               # Main orchestrator / entrypoint
-├── requirements.txt      # Project library dependencies
-└── .gitignore            # Git exclusion settings
+├── static/               
+├── templates/            
+├── uploads/              
+├── main.py               
+├── app.py                
+├── requirements.txt      
+└── .gitignore            
 ```
 
-## Setup & Installation
+---
 
-It is best to set up an isolated Python environment using \`venv\` or \`conda\`.
+## 💻 Tech Stack
 
-1. Create and activate a Virtual Environment:
-   ```bash
-   python -m venv venv
-   # Depending on OS:
-   source venv/bin/activate      # Mac/Linux
-   venv\Scripts\activate         # Windows
-   ```
+* Python
+* TensorFlow / Keras
+* Flask
+* HTML, CSS, JavaScript
+* NumPy
 
-2. Install Project Dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
+---
 
-## Pipeline Commands
+## ⚙️ Setup & Installation
 
-The orchestrator script, `main.py`, exposes the major actions:
+### 1. Create & Activate Environment
 
-### 1. Train the Network
-Downloads the MNIST dataset locally (into ~/.keras caching directory conceptually mapped to raw/ format), extracts preprocessing samples, builds the CNN architecture, and finally evaluates logic to `models/mnist_cnn.keras`:
+```bash
+python -m venv venv
+
+# Mac/Linux
+source venv/bin/activate
+
+# Windows
+venv\Scripts\activate
+```
+
+### 2. Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+## ▶️ Usage
+
+### Train the Model
+
 ```bash
 python main.py train
 ```
 
-### 2. Model Evaluation
-Will invoke the pre-trained module and summarize loss & accuracy metrics across the test dataset:
+### Evaluate Model
+
 ```bash
 python main.py evaluate
 ```
 
-### 3. Application Interface
-Leverage your model to derive digit predictions! Test out a random sample or specify a custom grayscale image layout:
-```bash
-# Random Test Inference
-python main.py app --sample
+### Run Application
 
-# Custom Hand-Drawn File Input
+```bash
+python main.py app --sample
+```
+
+### Custom Image
+
+```bash
 python main.py app --image ./path-to-image.png
 ```
 
-## Testing Context
-Tests can be triggered globally employing `pytest` from the root layer:
+---
+
+## 📸 Application Flow
+
+* Upload / Draw Input
+* Image Preprocessing
+* CNN Prediction
+* Result with Confidence Score
+
+---
+
+## 🧪 Testing
+
 ```bash
 pytest
 ```
+
+
